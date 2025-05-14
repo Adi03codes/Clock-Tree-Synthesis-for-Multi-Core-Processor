@@ -1,0 +1,19 @@
+module top(input clk, input rst, input en, output [7:0] out);
+  reg [7:0] counter;
+  wire gated_clk;
+
+  clock_gate u_gate (.clk(clk), .en(en), .gated_clk(gated_clk));
+
+  always @(posedge gated_clk or posedge rst) begin
+    if (rst)
+      counter <= 0;
+    else
+      counter <= counter + 1;
+  end
+
+  assign out = counter;
+endmodule
+
+module clock_gate(input clk, input en, output gated_clk);
+  assign gated_clk = clk & en;
+endmodule
